@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 
 public class CodeEditView extends LinearLayout implements TextWatcher, View.OnClickListener {
-    private static final int EditViewNum = 6; //默认输入框数量
+    private static final int EditViewNum = 4; //默认输入框数量
     private ArrayList<TextView> mTextViewsList = new ArrayList<>(); //存储EditText对象
     private Context mContext;
     private EditText mEditText;
@@ -89,7 +89,11 @@ public class CodeEditView extends LinearLayout implements TextWatcher, View.OnCl
         //设置方格文字
         for (int i = 0; i < EditViewNum; i++) {
             TextView textView = new TextView(mContext);
-            textView.setBackgroundResource(R.drawable.shape_border_normal);
+            if (i==0) {
+                textView.setBackgroundResource(R.drawable.bg_verify_code_focused);
+            } else {
+                textView.setBackgroundResource(R.drawable.bg_verify_code_normal);
+            }
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(DensityUtil.sp2px(mContext,textSize));
             textView.getPaint().setFakeBoldText(true);
@@ -146,6 +150,13 @@ public class CodeEditView extends LinearLayout implements TextWatcher, View.OnCl
             mTextViewsList.get(0).setText(s);
         } else {
             mTextViewsList.get(mEditText.getText().length() - 1).setText(s.subSequence(s.length() - 1, s.length()));
+        }
+        for (int i = 0; i < EditViewNum; i++) {
+            if (i == s.length()) {
+                mTextViewsList.get(i).setBackgroundResource(R.drawable.bg_verify_code_focused);
+            } else {
+                mTextViewsList.get(i).setBackgroundResource(R.drawable.bg_verify_code_normal);
+            }
         }
         if (s.length()==EditViewNum) {
             if (callBack!=null) {
