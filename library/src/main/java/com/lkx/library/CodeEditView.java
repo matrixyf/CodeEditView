@@ -113,17 +113,6 @@ public class CodeEditView extends LinearLayout implements TextWatcher, View.OnCl
                 mEditText.setHintTextColor(Color.parseColor("#ff0000"));
             }
         }, 500);
-        //监听删除键
-        mEditText.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_DEL) {
-                    if (mEditText.getText().length()>=mTextViewsList.size()) return false;
-                    mTextViewsList.get(mEditText.getText().length()).setText("");
-                }
-                return false;
-            }
-        });
     }
 
     private void initEditText(Context context) {
@@ -146,12 +135,12 @@ public class CodeEditView extends LinearLayout implements TextWatcher, View.OnCl
         if (callBack!=null) {
             callBack.afterTextChanged(s.toString());
         }
-        if (s.length() <= 1) {
-            mTextViewsList.get(0).setText(s);
-        } else {
-            mTextViewsList.get(mEditText.getText().length() - 1).setText(s.subSequence(s.length() - 1, s.length()));
-        }
-        for (int i = 0; i < EditViewNum; i++) {
+        for (int i=0;i<EditViewNum;i++) {
+            if (i<s.length()) {
+                mTextViewsList.get(i).setText(s.subSequence(i,i+1));
+            } else {
+                mTextViewsList.get(i).setText("");
+            }
             if (i == s.length()) {
                 mTextViewsList.get(i).setBackgroundResource(R.drawable.bg_verify_code_focused);
             } else {
